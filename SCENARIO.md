@@ -110,3 +110,20 @@ Yapay zekâ bileşeninin veritabanında uygulanması vize kapsamında değildir.
 Şikâyetin tekrar açılması yalnızca yanıt kalitesiyle ilişkili değildir. Sorunun gerçekten çözülüp çözülmemesi de bu sonucu etkileyebilir.
 
 Bu nedenle resmî ve samimi yanıt üslupları karşılaştırılırken bu ayrım dikkate alınacaktır. Gözlemsel verilerden elde edilen sonuçlar, gerçek bir kontrollü A/B deneyinin kanıtı olarak sunulmayacaktır.
+
+### 9. Hafta 4 – Veri Kalitesi Kontrolleri
+
+- `tone` değerlerinin formal, Formal, frml gibi farklı yazımlarının standartlaştırılması.
+- `reopened_at` tarihinin `opened_at` tarihinden önce olup olmadığının kontrol edilmesi.
+- Eksik tarih ve yanıt bağlantılarının belirlenmesi.
+- Tarih ve saat bilgilerinin standartlaştırılması.
+
+### 10. Hafta 5 – Planlanan SQL Analizleri
+
+1. Üsluba göre şikâyet sayısı ve tekrar açılma oranı (`GROUP BY`, `CASE WHEN`).
+2. Tekrar açılma tarihi NULL olan şikâyetlerin oranı ve yorumu.
+3. Her üslupta en az 40 şikâyeti olan konular (`HAVING`).
+4. Yanıt sürelerinin fast, medium ve slow olarak sınıflandırılması (`CASE WHEN`).
+5. Haftalık tekrar açılma oranının iki üslup için ayrı ayrı incelenmesi (`DATE_TRUNC`).
+
+Her sorgunun altında sonucu yorumlayan bir cümle bulunacaktır.
