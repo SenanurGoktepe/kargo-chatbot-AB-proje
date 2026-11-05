@@ -1,62 +1,70 @@
-# Kura #25 – Lojistik ve Teslimat Sohbet Asistanı
+# Kura #25 – YZO
+## Lojistik ve Teslimat × Sohbet Asistanı × Prompt Sürümleme ve A/B Testleri
 
-## 1. Proje Hikâyesi
+### 1. Proje Hikâyesi
 
-Bir kargo şirketinin müşteri hizmetleri sohbet asistanı, müşterilerden gelen iade ve geç teslimat şikâyetlerini yanıtlamaktadır. Şirket, müşterilere verilen yanıtların üslubunun müşteri memnuniyetini etkileyebileceğini düşünmektedir.
+Bir kargo şirketinin müşteri hizmetleri sohbet asistanı, müşterilerden gelen iade ve geç teslimat şikâyetlerini yanıtlamaktadır.
 
-Bu nedenle ekip, iki farklı yanıt üslubunu karşılaştırmak istemektedir:
+Şirketin müşteri hizmetleri ekibi, iki farklı yanıt üslubunun müşteri deneyimine etkisini karşılaştırmak istemektedir.
 
-- Formal: Resmî ve kurumsal yanıt üslubu.
-- Friendly: Samimi ve daha sıcak yanıt üslubu.
+Karşılaştırılacak yanıt üslupları:
+
+- **Formal:** Resmî ve kurumsal yanıt üslubu.
+- **Friendly:** Samimi ve sıcak yanıt üslubu.
 
 Projenin amacı, hangi yanıt üslubunun şikâyetlerin tekrar açılma oranını daha fazla azaltabileceğini araştırmaktır.
 
-## 2. Ana Araştırma Sorusu
+### 2. Ana Araştırma Sorusu
 
 Hangi yanıt üslubu (resmî veya samimi), müşteri şikâyetlerinin tekrar açılma oranını daha fazla azaltmaktadır?
 
-## 3. Hedef Kullanıcılar
+### 3. Hedef Kullanıcılar
 
 - Kargo şirketlerinin müşteri hizmetleri ekipleri.
-- Müşteri deneyimi ve memnuniyeti yöneticileri.
+- Müşteri deneyimi yöneticileri.
 - Sohbet asistanı geliştiren yazılım ekipleri.
 - Prompt tasarımı ve A/B testi yapan ekipler.
 
-## 4. Tablo Adayları
+### 4. Tablo Adayları
 
-### complaints
-Müşterilerin oluşturduğu şikâyet bilgilerini tutar.
+**complaints**
+
+Müşteri şikâyetlerine ait bilgileri tutması planlanan tablo.
 
 - id
 - topic
 - opened_at
 
-### responses
-Şikâyetlere verilen yanıtları tutar.
+**responses**
+
+Şikâyetlere verilen yanıt bilgilerini tutması planlanan tablo.
 
 - id
 - complaint_id
 - tone
 - response_time
 
-### reopenings
-Tekrar açılan şikâyetlerin bilgilerini tutar.
+**reopenings**
+
+Tekrar açılma bilgilerini tutması planlanan tablo.
 
 - id
 - complaint_id
 - reopened_at
 
-Bu tablolar proje kapsamında değerlendirilmesi planlanan mantıksal tablo adaylarıdır.
+Bu tablolar, proje senaryosunda belirlenen mantıksal tablo adaylarıdır.
 
-## 5. Veri Kaynağı Adayları
+### 5. Veri Kaynağı
 
-**Birincil aday: Kaggle – Customer Support on Twitter**
+**Birincil veri kaynağı: Kaggle – Customer Support on Twitter**
 
 https://www.kaggle.com/datasets/thoughtvector/customer-support-on-twitter
 
-Bu veri seti müşteriler ile şirketlerin müşteri destek hesapları arasındaki gerçek yazışmaları içermektedir.
+Veri seti, müşteriler ile şirketlerin müşteri destek hesapları arasındaki gerçek yazışmaları içermektedir.
 
-Veri setinde bulunan temel sütunlar:
+İncelenen ham veri dosyası `twcs.csv` olup 2.811.774 satır ve 7 sütundan oluşmaktadır.
+
+Temel sütunlar:
 
 - tweet_id
 - author_id
@@ -66,45 +74,38 @@ Veri setinde bulunan temel sütunlar:
 - response_tweet_id
 - in_response_to_tweet_id
 
-Veri setinin teslimat ve iade şikâyetleri açısından uygunluğu incelenecektir.
+Veri setinin teslimat, gecikme, iade ve müşteri destek konularına uygunluğu incelenmektedir.
 
-**Alternatif kaynaklar:**
+### 6. Beklenen Veri Sorunları
 
-- Hugging Face: customer complaints, customer support, conversations.
-- Kaggle: customer support tickets, delivery complaints.
+- Eksik yanıt bağlantıları.
+- Farklı tarih ve saat bilgilerinin standartlaştırılması ihtiyacı.
+- Mesajların müşteri veya şirket tarafından gönderildiğinin ayrıştırılması.
+- Mesaj içeriklerinin farklı dillerde olması.
+- Üslup değerlerinin farklı biçimlerde sınıflandırılması (formal, Formal, frml).
+- Şikâyetlerin tekrar açılma bilgisinin doğrudan bulunmaması.
 
-Veri seçiminde en az 500 satır, en az 4 sayısal sütun ve en az 1 tarih/zaman sütunu şartları dikkate alınacaktır.
+Veri kaynağında resmî A/B deney grubu ve prompt sürümü bilgileri bulunmamaktadır. Benzer şekilde, resmî şikâyet yeniden açılma kaydı da doğrudan yer almamaktadır.
 
-## 6. Veride Beklenen Sorunlar
+Şirket yanıtından sonra müşterinin yeniden mesaj göndermesi, resmî şikâyetin tekrar açılmasıyla aynı durum değildir. Bu nedenle böyle bir ölçüm kullanılırsa tekrar iletişim göstergesi olarak değerlendirilecek ve bu sınırlama sonuç yorumlarında belirtilecektir.
 
-- Üslup değerlerinin farklı biçimlerde yazılması (formal, Formal, frml).
-- Eksik tarih ve yanıt bilgileri.
-- Tarih formatlarının standartlaştırılması ihtiyacı.
-- Türkçe ve İngilizce metinlerin birlikte bulunması.
-- Aynı konuşmaya ait mesajların birbirleriyle ilişkilendirilmesi.
-- Resmî şikâyet yeniden açılma bilgisinin veri kaynağında bulunmaması.
-
-Gerçek A/B deney grubu ve prompt sürümü bilgileri mevcut kaynakta bulunmamaktadır. Bu nedenle bu bilgiler varmış gibi gösterilmeyecektir.
-
-Müşterinin şirket yanıtından sonra yeniden mesaj göndermesi, resmî şikâyetin yeniden açılmasıyla aynı şey değildir. Kaynak bu ayrımı yapmaya izin vermediği takdirde tekrar iletişim ölçümü bir gösterge olarak kullanılacak ve sonuçlar buna göre yorumlanacaktır.
-
-## 7. Yapay Zekâ Bileşeni
+### 7. Yapay Zekâ Bileşeni
 
 Projenin dönem sonu aşamasında sohbet asistanının iki farklı yanıt üslubunu karşılaştıran bir A/B test sistemi tasarlanacaktır.
 
 Bu sistemde:
 
 - Kullanıcıların deney gruplarına atanması,
-- Kullanılan prompt sürümünün kaydedilmesi,
-- Verilen yanıtların izlenmesi,
-- Şikâyetin tekrar açılma veya tekrar iletişim durumunun ölçülmesi
+- Kullanılan prompt sürümlerinin kaydedilmesi,
+- Asistan yanıtlarının izlenmesi,
+- Şikâyetlerin tekrar açılma durumunun ölçülmesi
 
 amaçlanmaktadır.
 
-YZ bileşeninin veritabanında uygulanması vize kapsamında değildir.
+Yapay zekâ bileşeninin veritabanında uygulanması vize kapsamında değildir.
 
-## 8. Sonuçların Değerlendirilmesi
+### 8. Sonuçların Değerlendirilmesi
 
-Tekrar açılma oranının yüksek veya düşük olması doğrudan yanıt kalitesini göstermeyebilir. Şikâyetin tekrar açılması, sorunun çözülüp çözülmemesiyle de ilişkili olabilir.
+Şikâyetin tekrar açılması yalnızca yanıt kalitesiyle ilişkili değildir. Sorunun gerçekten çözülüp çözülmemesi de bu sonucu etkileyebilir.
 
-Bu nedenle elde edilen sonuçlar değerlendirilirken müşteri hizmetlerinin yanıt üslubu ile problemin çözülmesi arasındaki fark dikkate alınacaktır.
+Bu nedenle resmî ve samimi yanıt üslupları karşılaştırılırken bu ayrım dikkate alınacaktır. Gözlemsel verilerden elde edilen sonuçlar, gerçek bir kontrollü A/B deneyinin kanıtı olarak sunulmayacaktır.
