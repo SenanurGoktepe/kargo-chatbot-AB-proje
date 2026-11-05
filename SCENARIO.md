@@ -104,6 +104,7 @@ amaçlanmaktadır.
 
 Yapay zekâ bileşeninin veritabanında uygulanması vize kapsamında değildir.
 
+
 ### 8. Sonuçların Değerlendirilmesi
 
 Şikâyetin tekrar açılması yalnızca yanıt kalitesiyle ilişkili değildir. Sorunun gerçekten çözülüp çözülmemesi de bu sonucu etkileyebilir.
