@@ -1,5 +1,5 @@
 # Kura #25 – YZO
-## Lojistik ve Teslimat × Sohbet Asistanı × Prompt Sürümleme ve A/B Testleri
+## Logistics & Delivery × Chatbot Assistant × Prompt Versioning & A/B Tests
 
 ### 1. Proje Hikâyesi
 
