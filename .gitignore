@@ -1,0 +1,6 @@
+
+# Ham veri setini GitHub'a gönderme
+data/raw/twcs.csv
+
+__pycache__/
+*.py[cod]
