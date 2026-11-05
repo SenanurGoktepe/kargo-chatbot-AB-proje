@@ -10,7 +10,7 @@ Bir kargo şirketinin müşteri hizmetleri sohbet asistanı, müşterilerden gel
 Karşılaştırılacak yanıt üslupları:
 
 - **Formal:** Resmî ve kurumsal yanıt üslubu.
-- **Friendly:** Samimi ve sıcak yanıt üslubu.
+- **Friendly:** Samimi ve sıcak yanıt üslubu. 
 
 Projenin amacı, hangi yanıt üslubunun şikâyetlerin tekrar açılma oranını daha fazla azaltabileceğini araştırmaktır.
 
