@@ -91,4 +91,27 @@ erDiagram
         varchar reason
     }
 
+**İlişki Açıklamaları:**
+* Bir şikâyet (`COMPLAINTS`), sıfır veya çok sayıda asistan yanıtına (`RESPONSES`) sahip olabilir; bir yanıt, tam olarak bir şikâyete aittir.
+* Bir prompt sürümü (`PROMPT_VERSIONS`), sıfır veya çok sayıda yanıtta (`RESPONSES`) kullanılabilir; bir yanıt, tam olarak bir prompt sürümüne aittir.
+* Bir şikâyet (`COMPLAINTS`), sıfır veya en fazla bir tekrar açılma kaydına (`REOPENINGS`) sahip olabilir; bir tekrar açılma kaydı, tam olarak bir şikâyete aittir.
 
+### Normalizasyon Notu
+
+| Tablo | Neden Ayrıldı / Ayrılmadı? (Bağımlılık) | Normal Form | Somut Örnek |
+| :--- | :--- | :--- | :--- |
+| **COMPLAINTS** | Her hücrede tek bir atomik değer tutulması ve tekrarlı mesaj listelerinin aynı satıra sıkıştırılmaması için tekil kayıt yapısında tutuldu (`id → source_tweet_id, customer_id, topic, opened_at`). | **1NF** | Bir müşterinin ardışık attığı mesajları tek sütunda virgülle ayırmak yerine her şikâyet kaydı ayrı satırda tek bir `topic` (örn. `geç teslimat`) ve tek bir `opened_at` zaman damgası tutar. |
+| **RESPONSES** | Tüm sütunlar tekil birincil anahtar olan `id` değerine tam bağımlıdır; bileşik anahtar kullanılmadığı için kısmi bağımlılık oluşmaması adına ayrı varlık olarak korundu (`id → complaint_id, prompt_version_id, response_time_sec, responded_at`). | **2NF** | Yanıt süresi (`response_time_sec`) yalnızca yanıtın kendi `id` değerine bağlıdır; şikâyetin konusuna veya müşteriye kısmi bağımlılık göstermez. |
+| **PROMPT_VERSIONS** | Üslup (`tone`) ve sürüm açıklaması (`description`) yanıtın kendisine değil, doğrudan kullanılan prompt sürümüne (`prompt_version_id → tone, description`) bağımlı olduğu için geçişli bağımlılığı önlemek amacıyla `RESPONSES` tablosundan ayrıldı. | **3NF** | `RESPONSES` tablosunda her satırda `"Formal - Resmî kurumsal şablon v1"` metnini tekrarlamak yerine yalnızca `prompt_version_id = 1` yabancı anahtarı tutulur. |
+
+### İki JOIN Sorusu
+
+1. **Soru 1 (Eşleşmeyen Kayıtlar — LEFT JOIN):**
+   * **Türkçe Soru:** Sohbet asistanı tarafından yanıtlandığı hâlde müşteri tarafından hiç tekrar açılmayan (başarıyla kapanan) şikâyetlerin konusu ve açılma tarihi nedir?
+   * **Birleşme Tabloları ve Sütunları:** `COMPLAINTS c` ile `REOPENINGS r` tabloları `c.id = r.complaint_id` üzerinden birleşir (ek olarak yanıtlanmış olanları süzmek için `RESPONSES res` ile `c.id = res.complaint_id`).
+   * **JOIN Türü ve Nedeni:** `LEFT JOIN` (ve `WHERE r.id IS NULL`) kullanılır; çünkü `COMPLAINTS` tablosundaki tüm şikâyetleri koruyup `REOPENINGS` tablosunda karşılığı bulunmayan (hiç tekrar açılmamış) kayıtları yakalamak gerekir.
+
+2. **Soru 2 (Eşleşen Kayıtlar — INNER JOIN):**
+   * **Türkçe Soru:** Resmî (`Formal`) ve samimi (`Friendly`) yanıt üsluplarına göre verilen asistan yanıtlarının ortalama yanıtlanma süresi (saniye) kaçtır?
+   * **Birleşme Tabloları ve Sütunları:** `RESPONSES res` ile `PROMPT_VERSIONS pv` tabloları `res.prompt_version_id = pv.id` üzerinden birleşir.
+   * **JOIN Türü ve Nedeni:** `INNER JOIN` kullanılır; çünkü yalnızca geçerli bir prompt sürümü ve üslup etiketiyle eşleşen gerçek asistan yanıtlarının istatistiği hesaplanmak istenmektedir.
