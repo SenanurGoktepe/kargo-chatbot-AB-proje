@@ -90,6 +90,8 @@ erDiagram
         timestamp reopened_at
         varchar reason
     }
+```
+
 
 **İlişki Açıklamaları:**
 * Bir şikâyet (`COMPLAINTS`), sıfır veya çok sayıda asistan yanıtına (`RESPONSES`) sahip olabilir; bir yanıt, tam olarak bir şikâyete aittir.
