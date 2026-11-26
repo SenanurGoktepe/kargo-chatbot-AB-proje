@@ -8,9 +8,9 @@
 
 **Kullandığım veritabanı:** ☐ llm_ops ☑ robot_fleet
 
-**PR bağlantısı:** https://github.com/SenanurGoktepe/kargo-chatbot-AB-proje/pull/
+**PR bağlantısı:** https://github.com/SenanurGoktepe/kargo-chatbot-AB-proje/pull/2
 
-**Commit sayısı:** 6
+**Commit sayısı:** 7
 
 ---
 
